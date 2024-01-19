@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -7,12 +8,20 @@ import { Observable } from 'rxjs';
 export class AuthService {
   constructor(private _HttpClient: HttpClient) {}
 
+  userData = null;
+
   private url = 'https://estore.ammarelgendy.online/api/v1/';
+
+  decodeUseData() {
+    let encodeToken = JSON.stringify(localStorage.getItem('userToken'));
+    let decodeToken: any = jwtDecode(encodeToken);
+    this.userData = decodeToken;
+  }
 
   register(userData: object): Observable<any> {
     return this._HttpClient.post(this.url + 'register', userData);
   }
-  
+
   login(userData: object): Observable<any> {
     return this._HttpClient.post(this.url + 'login', userData);
   }

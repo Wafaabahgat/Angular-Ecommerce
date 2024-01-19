@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -32,7 +31,9 @@ export class LoginComponent {
       this.isLoading = true;
       this.AuthService.login(loginForm.value).subscribe({
         next: (response) => {
-          if (response === 'success') {
+          localStorage.setItem('userToken', response.token);
+          this.AuthService.decodeUseData();
+          if (response.msg === 'success') {
             this.isLoading = false;
             this.Router.navigate(['/home']);
           }
